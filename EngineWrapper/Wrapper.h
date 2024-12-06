@@ -1,55 +1,30 @@
 #pragma once
 
 #include <string>
+#include "Subject.h"
 #include <iostream>
 #include <unordered_map>
-#include <variant>
-#include <tuple>
-#include <iterator>
 #include <stdexcept>
 #include <vector>
+#include <any>
 
-template<typename T, typename ...ArgTypes>
+using namespace std;
+
 class Wrapper {
 private:
-	using Arguments = std::unordered_map<std::string, int>;
-	T* subject;
-	int(T::* method)(ArgTypes...);
-	Arguments arguments;
-
-	template<std::size_t ...I>
-	int call(std::vector<int> values, std::index_sequence<I...>) {
-		return (this->subject->*(this->method))(std::forward<ArgTypes>(values[I])...);
-	}
+	Subject* subj;
+	function<string(const unordered_map<string, any>&)> func;
 public:
-	Wrapper(
-		T* subject,
-		int(T::* method)(ArgTypes...),
-		Arguments const& arguments
-	) : subject(subject), method(method), arguments(arguments) {}
+	Wrapper(Subject* subject, const function<string(const unordered_map<string, any>&)>& function)
+		: subj(subject), func(function) {
+	}
 
-	auto execute(Arguments const& args) {
-		int size = this->arguments.size();
-		if (args.size() != this->arguments.size()) {
-			throw std::invalid_argument(
-				std::string("Incorrect number of arguments provided, expected ") +
-				std::to_string(size) + std::string(", received ") +
-				std::to_string(args.size())
-			);
+	string execute(const unordered_map<string, any>& arguments) {
+		try {
+			return func(arguments);
 		}
-		auto stored = this->arguments.begin();
-		std::vector<int> values(size);
-		for (int i = 0; i < size; ++i) {
-			auto found = args.find(stored->first);
-			if (found == args.end()) {
-				throw std::invalid_argument(
-					std::string("Argument ") + stored->first +
-					std::string(" was not found in provided parameters")
-				);
-			}
-			values[std::distance(this->arguments.begin(), stored)] = found->second;
-			stored++;
+		catch (const exception& e) {
+			throw runtime_error("Execution error: " + string(e.what()));
 		}
-		return this->call(values, std::make_index_sequence<sizeof...(ArgTypes)>{});
 	}
 };

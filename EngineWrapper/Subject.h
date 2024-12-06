@@ -1,22 +1,15 @@
-#pragma once
+#include <any>
+#include <unordered_map>
 #include <iostream>
+#include <string>
 
 using namespace std;
 
 class Subject {
 public:
-	int f1(int a, double b, double c) {
-		cout << "Function f1 is called. Its arguments: " << a << ", " << b << ", " << c << endl;
-		return a * b - c;
-	}
-
-	int f2(int a, double b) {
-		cout << "Function f2 is called. Its arguments: " << a << ", " << b << endl;
-		return b - a;
-	}
-
-	string f3(const string& str1, const string& str2) {
-		cout << "Function f3 is called. Its arguments: " << str1 << ", " << str2 << endl;
-		return str1 + str2;
-	};
+    string replace_word(const unordered_map<string, any>& arguments);
+    string find_word_combinations(const unordered_map<string, any>& arguments);
+    string to_capital_word(const unordered_map<string, any>& arguments);
+    string to_capital_word_sentence(const unordered_map<string, any>& arguments);
+    string number_and_format_sentence(const unordered_map<string, any>& arguments);
 };
