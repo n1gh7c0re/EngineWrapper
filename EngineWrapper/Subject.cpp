@@ -67,7 +67,7 @@ string Subject::to_capital_word(const unordered_map<string, any>& arguments) {
     }
 }
 
-string Subject::to_capital_word_sentence(const unordered_map<string, any>& arguments) {
+string Subject::to_capital_sentence(const unordered_map<string, any>& arguments) {
     try {
         string text = any_cast<string>(arguments.at("text"));
         bool isCapital = true;
