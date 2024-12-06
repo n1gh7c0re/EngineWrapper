@@ -1,0 +1,12 @@
+**/Debug
+!funccos.dll
+**/framework.h
+**/dllmain.cpp
+**/Release
+**/.vs
+**/*vcxproj.user
+**/pch.h
+**/pch.cpp
+**/plugins/**/*.vcxproj
+**/plugins/**/*.filters
+
